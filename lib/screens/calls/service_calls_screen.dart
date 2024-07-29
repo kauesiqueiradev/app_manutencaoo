@@ -56,7 +56,7 @@ class ServiceCallsScreen extends StatelessWidget {
           } else if (snapshot.hasError) {
             return Center(child: Text('Error: ${snapshot.error}'));
           } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-            return const Center(child: Text('No open calls found'));
+            return const Center(child: Text('Não tem chamados em atendimento'));
           } else {
             final openCalls = snapshot.data!;
             return ListView.builder(
@@ -74,6 +74,36 @@ class ServiceCallsScreen extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
+                      ElevatedButton(
+                      child: const Text('Pausar Chamado'),
+                      onPressed: () async {
+                        try {
+                          print("Chamado Aceitar clicado"); // Adicione esta linha
+                          await callsService.putPausedCall(call['num   '] ?? '');
+                          print("Chamado iniciado com sucesso"); // Adicione esta linha
+                          // showPopup(context, 'Chamado iniciado com sucesso.');
+                          } catch (e) {
+                            print("Erro ao iniciar o chamado: $e"); // Adicione esta linha
+                            // showPopup(context, 'Erro ao iniciar o chamado: $e');
+                          }
+                          Navigator.pop(context);
+                        },
+                      ),
+                      ElevatedButton(
+                      child: const Text('Finalizar Chamado'),
+                      onPressed: () async {
+                        try {
+                          print("Chamado Aceitar clicado"); // Adicione esta linha
+                          await callsService.putCompletedCall(call['num   '] ?? '');
+                          print("Chamado iniciado com sucesso"); // Adicione esta linha
+                          // showPopup(context, 'Chamado iniciado com sucesso.');
+                          } catch (e) {
+                            print("Erro ao iniciar o chamado: $e"); // Adicione esta linha
+                            // showPopup(context, 'Erro ao iniciar o chamado: $e');
+                          }
+                          Navigator.pop(context);
+                        },
+                      ),
                       Text(
                         'Num: ${call['num   ']}',
                         style: const TextStyle(
@@ -113,7 +143,6 @@ class ServiceCallsScreen extends StatelessWidget {
                         ),
                       ),
                       const SizedBox(height: 8),
-                      // Adicione mais campos conforme necessário
                     ],
                   ),
                 );

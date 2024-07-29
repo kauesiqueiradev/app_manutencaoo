@@ -3,8 +3,8 @@ import 'package:app_manutencao/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:shimmer/shimmer.dart';
 
-class PausedCallsWidget extends StatelessWidget {
-  const PausedCallsWidget({super.key});
+class PausedCallsScreen extends StatelessWidget {
+  const PausedCallsScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -12,7 +12,7 @@ class PausedCallsWidget extends StatelessWidget {
     
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Chamados Pausados', style: TextStyle(fontFamily: 'Ubuntu', fontWeight: FontWeight.w700, color: Colors.white),),
+        title: const Text('Chamados Pausadoss', style: TextStyle(fontFamily: 'Ubuntu', fontWeight: FontWeight.w700, color: Colors.white),),
         backgroundColor: blueColor,
       ),
       body: FutureBuilder<List<dynamic>>(
@@ -56,7 +56,7 @@ class PausedCallsWidget extends StatelessWidget {
           } else if (snapshot.hasError) {
             return Center(child: Text('Error: ${snapshot.error}'));
           } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-            return const Center(child: Text('No open calls found'));
+            return const Center(child: Text('Não tem chamados pausadoss'));
           } else {
             final openCalls = snapshot.data!;
             return ListView.builder(
@@ -74,6 +74,21 @@ class PausedCallsWidget extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
+                      ElevatedButton(
+                        child: const Text('Iniciar Novamente o Chamado'),
+                        onPressed: () async {
+                          try {
+                            print("Chamado Aceitar clicado"); // Adicione esta linha
+                            await callsService.putPausedFinishedCall(call['num   '] ?? '');
+                            print("Chamado iniciado com sucesso"); // Adicione esta linha
+                            // showPopup(context, 'Chamado iniciado com sucesso.');
+                          } catch (e) {
+                            print("Erro ao iniciar o chamado: $e"); // Adicione esta linha
+                            // showPopup(context, 'Erro ao iniciar o chamado: $e');
+                          }
+                          Navigator.pop(context);
+                        },
+                      ),
                       Text(
                         'Num: ${call['num   ']}',
                         style: const TextStyle(
